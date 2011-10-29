@@ -10,7 +10,7 @@ object JsonAst {
   sealed trait JsonValue
   case class JsonObject(kvs: List[(String, JsonValue)]) extends JsonValue
   object JsonObject {
-    def apply(kvs: (String, JsonValue)*): JsonObject = JsonObject(kv.toList)
+    def apply(kvs: (String, JsonValue)*): JsonObject = JsonObject(kvs.toList)
   }
   case class JsonArray(values : List[JsonValue]) extends JsonValue
   case class JsonString(value: String) extends JsonValue
