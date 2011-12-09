@@ -9,6 +9,7 @@ package org.onion_lang.jasson
 object JsonSchema {
   sealed trait SchemaEntry
   sealed trait TypeSchema
+  final case class SchemaUnit(name: String,  preamble: String,  schema: ObjectSchema)
   final case class ObjectSchema(name: String, description: Option[String], properties: List[(String, SchemaEntry)]) extends SchemaEntry
   final case class StringSchema(required: Boolean, minLength: Option[Int], maxLength: Option[Int]) extends SchemaEntry with TypeSchema
   final case class IntegerSchema(required: Boolean, maximum: Option[Int], minimum: Option[Int]) extends SchemaEntry with TypeSchema
