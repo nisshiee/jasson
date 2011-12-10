@@ -17,6 +17,16 @@ object JassonTool {
       case Array("-d", dirName, inputFile) =>
         using(new FileReader(inputFile)){r =>
           val input = readAll(r)
+          val schema = JaconParser.parseFrom(input) match {
+            case JaconParser.Success(value, _) =>
+              value
+            case JaconParser.Failure(msg, _) =>
+              Console.err.println(msg)
+              return
+            case JaconParser.Error(msg, _) =>
+              Console.err.println(msg)
+              return
+          }
           val json = JSON.parseRaw(input)
           //CodeGenerator(inputFile).generateCode(json)
         }

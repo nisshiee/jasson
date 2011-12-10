@@ -21,6 +21,7 @@ object JaconParser extends RegexParsers {
   lazy val K_SEMICOLON: Parser[String] = ";"
   lazy val K_COLON: Parser[String] = ":"
   lazy val INTEGER: Parser[Int] = """[0-9_]*""".r ^^ {_.toInt}
+  def parseFrom(input: CharSequence): ParseResult[SchemaUnit] = parseAll(all, input)
   lazy val all: Parser[SchemaUnit] = preamble ~ objectProperty ^^ { case pre ~ ((name, oschema)) => SchemaUnit(name, pre, oschema) }
   lazy val preamble: Parser[String] = K_BEGIN_PREAMBLE ~> """((?!(>>>>))(\[rnfb"'\\]|[^\\]))+""".r <~ K_END_PREAMBLE
   lazy val typeSchema: Parser[TypeSchema] = stringSchema | integerSchema | numberSchema | booleanSchema | anySchema | refSchema | nullSchema | arraySchema
