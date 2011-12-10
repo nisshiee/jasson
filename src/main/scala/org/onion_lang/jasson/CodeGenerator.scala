@@ -68,11 +68,11 @@ object CodeGenerator {
                 case StringSchema(req, min, max) =>
                   pn("newObject.%s = json.obj(\"%s\").asInstanceOf[String]", name, name)
                 case IntegerSchema(req, min, max) =>
-                  pn("newObject.%s = json.obj(\"%s\").asInstanceOf[String].toInt", name, name)
+                  pn("newObject.%s = json.obj(\"%s\").asInstanceOf[Double].toInt", name, name)
                 case NumberSchema(req, min, max) =>
-                  pn("newObject.%s = json.obj(\"%s\").asInstanceOf[String].toDouble", name, name)
+                  pn("newObject.%s = json.obj(\"%s\").asInstanceOf[Double]", name, name)
                 case BooleanSchema(req) =>
-                  pn("newObject.%s = json.obj(\"%s\").asInstanceOf[String].toBoolean", name, name)
+                  pn("newObject.%s = json.obj(\"%s\").asInstanceOf[Boolean]", name, name)
                 case AnySchema(req) =>
                   pn("newObject.%s = json.obj(\"%s\").asInstanceOf[Any]", name, name)
                 case RefSchema(req, ref) =>
