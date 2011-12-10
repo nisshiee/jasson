@@ -22,11 +22,11 @@ object JaconParser extends RegexParsers {
   lazy val K_COLON: Parser[String] = ":"
   lazy val INTEGER: Parser[Int] = """[0-9_]*""".r ^^ {_.toInt}
   def parseFrom(input: CharSequence): ParseResult[SchemaUnit] = parseAll(all, input)
-  lazy val all: Parser[SchemaUnit] = preamble ~ objectProperty ^^ { case pre ~ ((name, oschema)) => SchemaUnit(name, pre, oschema) }
+  lazy val all: Parser[SchemaUnit] = opt(preamble) ~ objectProperty ^^ { case pre ~ ((name, oschema)) => SchemaUnit(name, pre.getOrElse(""), oschema) }
   lazy val preamble: Parser[String] = K_BEGIN_PREAMBLE ~> """((?!(>>>>))(\[rnfb"'\\]|[^\\]))+""".r <~ K_END_PREAMBLE
   lazy val typeSchema: Parser[TypeSchema] = stringSchema | integerSchema | numberSchema | booleanSchema | anySchema | refSchema | nullSchema | arraySchema
   lazy val property: Parser[(String, SchemaEntry)] = objectProperty | typedProperty
-  lazy val typedProperty: Parser[(String, TypeSchema)] = K_IDENT ~ (K_COLON ~> typeSchema) ^^ { case name ~ tpe => (name, tpe) }
+  lazy val typedProperty: Parser[(String, TypeSchema)] = K_IDENT ~ (K_COLON ~> typeSchema <~ K_SEMICOLON) ^^ { case name ~ tpe => (name, tpe) }
   lazy val objectProperty: Parser[(String, ObjectSchema)] = (K_OBJECT ~> K_IDENT  <~ K_LBRACE) ~ (property.* <~ K_RBRACE)^^ { case name ~ props => (name, ObjectSchema(None, props)) }
   lazy val stringSchema: Parser[StringSchema] = "string" ~> (opt("?" ^^ {x => false}) ~ opt("min" ~> "=" ~> INTEGER) ~ opt("max" ~> "=" ~> INTEGER)) ^^ {
     case required ~ min ~ max  => StringSchema(required.getOrElse(true), min, max)
