@@ -18,7 +18,7 @@ object JassonTool {
         using(new FileReader(inputFile)){r =>
           val input = readAll(r)
           val json = JSON.parseRaw(input)
-          CodeGenerator(inputFile).generateCode(json)
+          //CodeGenerator(inputFile).generateCode(json)
         }
       case _ =>
         println("Usage: scala JassonTool -d <dir_name> input.json")
