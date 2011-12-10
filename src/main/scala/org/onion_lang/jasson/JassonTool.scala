@@ -27,8 +27,7 @@ object JassonTool {
               Console.err.println(msg)
               return
           }
-          println(schema)
-          //CodeGenerator(inputFile).generateCode(json)
+          CodeGenerator(".").generateCode(schema)
         }
       case _ =>
         println("Usage: scala JassonTool -d <dir_name> input.json")
